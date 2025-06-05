@@ -79,7 +79,7 @@ class FaseJogando:
             ]
         }
 
-        return random.sample(todas[self.dificuldade], 9)
+        return random.sample(todas[self.dificuldade], 10)
 
     def exibir_pergunta(self):
         self.enunciado_label = pygame_gui.elements.UILabel(

@@ -14,6 +14,11 @@ pygame.display.set_caption('quickly')
 
 manager = pygame_gui.UIManager((largura_tela, altura_tela), 'theme.json')
 
+logo_image = pygame.image.load("images/logo_quicly.png").convert_alpha()
+logo_image = pygame.transform.scale(logo_image, (400, 200))
+logo_rect = logo_image.get_rect(center=(largura_tela // 2, 200)) 
+
+
 tela.fill((0, 0, 0))
 
 # Estado e dificuldade
@@ -61,7 +66,30 @@ while running:
                 inicio_button = pygame_gui.elements.UIButton(
                     pygame.Rect(350, 350, 100, 50), 'START GAME', manager=manager
                 )
+
+                voltar_menu_button = pygame_gui.elements.UIButton(
+                pygame.Rect(300, 400, 200, 50),
+                text='Voltar ao Menu',
+                manager=manager
+                )
                 estado = 'inicio'
+            
+            elif estado == 'inicio' and event.ui_element == voltar_menu_button:
+                inicio_button.kill()
+                voltar_menu_button.kill()
+                
+                # Recria botões do menu
+                menu_button_facil = pygame_gui.elements.UIButton(
+                    pygame.Rect(350, 350, 100, 50), 'FÁCIL', manager=manager
+                )
+                menu_button_medio = pygame_gui.elements.UIButton(
+                    pygame.Rect(350, 410, 100, 50), 'MÉDIO', manager=manager
+                )
+                menu_button_dificil = pygame_gui.elements.UIButton(
+                    pygame.Rect(350, 470, 100, 50), 'DIFÍCIL', manager=manager
+                )
+                
+                estado = 'menu'
 
             elif estado == 'inicio' and event.ui_element == inicio_button:
                 inicio_button.kill()
@@ -91,6 +119,10 @@ while running:
 
     tela.fill((0, 0, 0))
 
+    if estado in ('menu', 'inicio'):
+        tela.blit(logo_image, logo_rect)
+
+
     if estado == 'jogando' and fase_jogando is not None:
         fase_jogando.atualizar_tempo(time_delta)
 
@@ -108,7 +140,7 @@ while running:
             )
             estado = 'score'
 
-
+    
     manager.update(time_delta)
     manager.draw_ui(tela)
     pygame.display.flip()
