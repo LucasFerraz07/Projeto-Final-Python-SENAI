@@ -19,7 +19,7 @@ logo_image = pygame.transform.scale(logo_image, (400, 200))
 logo_rect = logo_image.get_rect(center=(largura_tela // 2, 200)) 
 
 
-tela.fill((0, 0, 0))
+tela.fill((255, 255, 255))
 
 # Estado e dificuldade
 estado = 'menu'
@@ -93,6 +93,7 @@ while running:
 
             elif estado == 'inicio' and event.ui_element == inicio_button:
                 inicio_button.kill()
+                voltar_menu_button.kill()
                 fase_jogando = FaseJogando(manager, dificuldade)
                 estado = 'jogando'
 
@@ -117,7 +118,7 @@ while running:
                     estado = 'menu'
 
 
-    tela.fill((0, 0, 0))
+    tela.fill((255, 255, 255))
 
     if estado in ('menu', 'inicio'):
         tela.blit(logo_image, logo_rect)

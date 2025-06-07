@@ -1,0 +1,51 @@
+{
+    "screen": {
+      "background_color": "rgb(255, 255, 255)",
+      "logo": {
+        "text": "QUIKLY",
+        "font": "bold italic",
+        "size": 72,
+        "color_gradient": ["#FF5C5C", "#FF9900", "#FFD700", "#32CD32", "#1E90FF", "#6A5ACD"],
+        "position": {
+          "x": "center",
+          "y": 150
+        }
+      },
+      "buttons": [
+        {
+          "text": "FÁCIL",
+          "size": "medium",
+          "position": { "x": "center", "y": 350 },
+          "style": {
+            "bg_color": "rgb(107, 95, 95)",
+            "text_color": "white",
+            "padding": "10px 20px",
+            "border_radius": 5
+          }
+        },
+        {
+          "text": "MÉDIO",
+          "size": "medium",
+          "position": { "x": "center", "y": 410 },
+          "style": {
+            "bg_color": "rgb(107, 95, 95)",
+            "text_color": "white",
+            "padding": "10px 20px",
+            "border_radius": 5
+          }
+        },
+        {
+          "text": "DIFÍCIL",
+          "size": "medium",
+          "position": { "x": "center", "y": 470 },
+          "style": {
+            "bg_color": "rgb(107, 95, 95)",
+            "text_color": "white",
+            "padding": "10px 20px",
+            "border_radius": 5
+          }
+        }
+      ]
+    }
+  }
+  
