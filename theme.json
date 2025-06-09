@@ -17,7 +17,7 @@
           "size": "medium",
           "position": { "x": "center", "y": 350 },
           "style": {
-            "bg_color": "rgb(107, 95, 95)",
+            "bg_color": "rgb(0, 0, 0)",
             "text_color": "white",
             "padding": "10px 20px",
             "border_radius": 5
@@ -28,7 +28,7 @@
           "size": "medium",
           "position": { "x": "center", "y": 410 },
           "style": {
-            "bg_color": "rgb(107, 95, 95)",
+            "bg_color": "rgb(0, 0, 0)",
             "text_color": "white",
             "padding": "10px 20px",
             "border_radius": 5
@@ -39,7 +39,7 @@
           "size": "medium",
           "position": { "x": "center", "y": 470 },
           "style": {
-            "bg_color": "rgb(107, 95, 95)",
+            "bg_color": "rgb(0, 0, 0)",
             "text_color": "white",
             "padding": "10px 20px",
             "border_radius": 5
