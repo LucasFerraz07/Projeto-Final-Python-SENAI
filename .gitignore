@@ -1,0 +1,22 @@
+# Ignorar arquivos compilados do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignorar ambientes virtuais
+venv/
+.venv/
+
+# Ignorar arquivos de log e banco de dados temporários
+*.log
+*.sqlite3
+
+# Ignorar configurações locais
+.env
+*.env
+
+# Ignorar arquivos do VS Code (se estiver usando)
+.vscode/
+
+# Ignorar arquivos de cache do Jupyter
+.ipynb_checkpoints/

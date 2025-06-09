@@ -1,107 +1,158 @@
 import pygame
 import pygame_gui
-import pygame_gui.ui_manager
+from faseJogando import FaseJogando
 
 pygame.init()
+
+score_label = None
+voltar_menu_button = None
 
 largura_tela = 800
 altura_tela = 800
 tela = pygame.display.set_mode((largura_tela, altura_tela))
-pygame.display.set_caption('Jogo da cobrinha')
+pygame.display.set_caption('quickly')
 
-# criando manager para o pygame_gui
-gerente = pygame_gui.UIManager((largura_tela, altura_tela), 'theme.json')
+manager = pygame_gui.UIManager((largura_tela, altura_tela), 'theme.json')
 
-# pinta a tela
-# Usa o RGB como padrão 
-tela_cor = (0, 0, 0)
-tela.fill(tela_cor)
+logo_image = pygame.image.load("images/logo_quicly.png").convert_alpha()
+logo_image = pygame.transform.scale(logo_image, (400, 200))
+logo_rect = logo_image.get_rect(center=(largura_tela // 2, 200)) 
 
-#Criação botão menu:
-menu_button_facil = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect([(350, 350), (100, 50)]),
-        text='FÁCIL',
-        manager = gerente
-    )
-
-menu_button_medio = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect([(350, 401), (100, 50)]),
-        text='MÉDIO',
-        manager = gerente
-    )
-
-menu_button_dificil = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect([(350, 451), (100, 50)]),
-        text='DIFÍCIL',
-        manager = gerente
-    )
+imagem_inferior = pygame.image.load("images/operadores.png").convert_alpha()
+imagem_inferior = pygame.transform.scale(imagem_inferior, (800, 400))  # ajuste conforme necessário
+imagem_inferior_rect = imagem_inferior.get_rect(center=(largura_tela // 2, 650))  # y = 650 abaixo dos botões
 
 
-# estados do jogo:
-# menu, #inicio, jogando, score, fim
+
+tela.fill((255, 255, 255))
+
+# Estado e dificuldade
 estado = 'menu'
-
-#dificuldade do jogo:
-#facil, medio, dificil
 dificuldade = 'FACIL'
+fase_jogando = None
 
+# Botões de menu
+menu_button_facil = pygame_gui.elements.UIButton(
+    pygame.Rect(350, 350, 100, 50), 'FÁCIL', manager=manager
+)
+menu_button_medio = pygame_gui.elements.UIButton(
+    pygame.Rect(350, 410, 100, 50), 'MÉDIO', manager=manager
+)
+menu_button_dificil = pygame_gui.elements.UIButton(
+    pygame.Rect(350, 470, 100, 50), 'DIFÍCIL', manager=manager
+)
+
+inicio_button = None
+clock = pygame.time.Clock()
 running = True
 
 while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
+    time_delta = clock.tick(60) / 1000  # 100 segundos
+
     for event in pygame.event.get():
-        gerente.process_events(event)
         if event.type == pygame.QUIT:
             running = False
+
+        manager.process_events(event)
+
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == menu_button_facil:
-                estado = 'inicio'
-                dificuldade = 'FACIL' 
+            if estado == 'menu':
+                if event.ui_element == menu_button_facil:
+                    dificuldade = 'FACIL'
+                elif event.ui_element == menu_button_medio:
+                    dificuldade = 'MEDIO'
+                elif event.ui_element == menu_button_dificil:
+                    dificuldade = 'DIFICIL'
+
                 menu_button_facil.kill()
                 menu_button_medio.kill()
                 menu_button_dificil.kill()
-                #botão start
+
                 inicio_button = pygame_gui.elements.UIButton(
-                relative_rect=pygame.Rect([(350, 350), (100, 50)]),
-                text='START GAME',
-                manager = gerente
+                    pygame.Rect(350, 350, 100, 50), 'START GAME', manager=manager
                 )
-            elif event.ui_element == menu_button_medio:
+
+                voltar_menu_button = pygame_gui.elements.UIButton(
+                pygame.Rect(300, 400, 200, 50),
+                text='Voltar ao Menu',
+                manager=manager
+                )
                 estado = 'inicio'
-                dificuldade = 'MEDIO' 
-                menu_button_facil.kill()
-                menu_button_medio.kill()
-                menu_button_dificil.kill()
-                #botão start
-                inicio_button = pygame_gui.elements.UIButton(
-                relative_rect=pygame.Rect([(350, 350), (100, 50)]),
-                text='START GAME',
-                manager = gerente
-                )
-            elif event.ui_element == menu_button_dificil:
-                estado = 'inicio'
-                dificuldade = 'DIFICIL' 
-                menu_button_facil.kill()
-                menu_button_medio.kill()
-                menu_button_dificil.kill()
-                #botão start
-                inicio_button = pygame_gui.elements.UIButton(
-                relative_rect=pygame.Rect([(350, 350), (100, 50)]),
-                text='START GAME',
-                manager = gerente
-                )
-            elif event.ui_element == inicio_button:
-                estado = 'jogando'
+            
+            elif estado == 'inicio' and event.ui_element == voltar_menu_button:
                 inicio_button.kill()
+                voltar_menu_button.kill()
+                
+                # Recria botões do menu
+                menu_button_facil = pygame_gui.elements.UIButton(
+                    pygame.Rect(350, 350, 100, 50), 'FÁCIL', manager=manager
+                )
+                menu_button_medio = pygame_gui.elements.UIButton(
+                    pygame.Rect(350, 410, 100, 50), 'MÉDIO', manager=manager
+                )
+                menu_button_dificil = pygame_gui.elements.UIButton(
+                    pygame.Rect(350, 470, 100, 50), 'DIFÍCIL', manager=manager
+                )
+                
+                estado = 'menu'
 
-    tela.fill(tela_cor)
+            elif estado == 'inicio' and event.ui_element == inicio_button:
+                inicio_button.kill()
+                voltar_menu_button.kill()
+                fase_jogando = FaseJogando(manager, dificuldade)
+                estado = 'jogando'
+
+            elif estado == 'jogando' and fase_jogando is not None:
+                fase_jogando.responder(event.ui_element)
+
+            elif estado == 'score':
+                if event.ui_element == voltar_menu_button:
+                    score_label.kill()
+                    voltar_menu_button.kill()
+                    # Recria botões do menu
+                    menu_button_facil = pygame_gui.elements.UIButton(
+                        pygame.Rect(350, 350, 100, 50), 'FÁCIL', manager=manager
+                    )
+                    menu_button_medio = pygame_gui.elements.UIButton(
+                        pygame.Rect(350, 410, 100, 50), 'MÉDIO', manager=manager
+                    )
+                    menu_button_dificil = pygame_gui.elements.UIButton(
+                        pygame.Rect(350, 470, 100, 50), 'DIFÍCIL', manager=manager
+                    )
+                    fase_jogando = None
+                    estado = 'menu'
 
 
-    # estou pedindo para atualizar os elementos do pygame_gui    
-    gerente.update(1 / 60.0)
-    gerente.draw_ui(tela)
+    tela.fill((255, 255, 255))
+
+    if estado in ('menu', 'inicio', 'score'):
+        tela.blit(imagem_inferior, imagem_inferior_rect)
+        tela.blit(logo_image, logo_rect)
     
+    if estado in ('menu', 'inicio', 'jogando'):
+        tela.blit(imagem_inferior, imagem_inferior_rect)
+        
+
+    if estado == 'jogando' and fase_jogando is not None:
+        fase_jogando.atualizar_tempo(time_delta)
+
+        if fase_jogando.finalizado:
+            # Cria os elementos da tela de score
+            score_label = pygame_gui.elements.UILabel(
+                pygame.Rect(250, 300, 300, 50),
+                text=f'Sua pontuação: {fase_jogando.pontuacao} / 100',
+                manager=manager
+            )
+            voltar_menu_button = pygame_gui.elements.UIButton(
+                pygame.Rect(300, 400, 200, 50),
+                text='Voltar ao Menu',
+                manager=manager
+            )
+            estado = 'score'
+
+    
+    manager.update(time_delta)
+    manager.draw_ui(tela)
     pygame.display.flip()
 
 pygame.quit()
