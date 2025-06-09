@@ -19,7 +19,15 @@ class FaseJogando:
         self.pergunta_atual = 0
         self.perguntas = self.carregar_perguntas()
         self.botoes = [] 
-        self.tempo_total = 60  # segundos
+        if self.dificuldade == "facil":
+            self.tempo_total = 150
+        elif self.dificuldade == "medio":
+            self.tempo_total = 120
+        elif self.dificuldade == "dificil":
+            self.tempo_total = 90
+        else:
+            self.tempo_total = 120  # valor padrão caso a dificuldade seja desconhecida
+
         self.tempo_restante = self.tempo_total
         self.criando_barra_tempo()
         self.exibir_pergunta()

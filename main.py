@@ -18,6 +18,11 @@ logo_image = pygame.image.load("images/logo_quicly.png").convert_alpha()
 logo_image = pygame.transform.scale(logo_image, (400, 200))
 logo_rect = logo_image.get_rect(center=(largura_tela // 2, 200)) 
 
+imagem_inferior = pygame.image.load("images/operadores.png").convert_alpha()
+imagem_inferior = pygame.transform.scale(imagem_inferior, (800, 400))  # ajuste conforme necessário
+imagem_inferior_rect = imagem_inferior.get_rect(center=(largura_tela // 2, 650))  # y = 650 abaixo dos botões
+
+
 
 tela.fill((255, 255, 255))
 
@@ -120,9 +125,13 @@ while running:
 
     tela.fill((255, 255, 255))
 
-    if estado in ('menu', 'inicio'):
+    if estado in ('menu', 'inicio', 'score'):
+        tela.blit(imagem_inferior, imagem_inferior_rect)
         tela.blit(logo_image, logo_rect)
-
+    
+    if estado in ('menu', 'inicio', 'jogando'):
+        tela.blit(imagem_inferior, imagem_inferior_rect)
+        
 
     if estado == 'jogando' and fase_jogando is not None:
         fase_jogando.atualizar_tempo(time_delta)
@@ -131,7 +140,7 @@ while running:
             # Cria os elementos da tela de score
             score_label = pygame_gui.elements.UILabel(
                 pygame.Rect(250, 300, 300, 50),
-                text=f'Sua pontuação: {fase_jogando.pontuacao}',
+                text=f'Sua pontuação: {fase_jogando.pontuacao} / 100',
                 manager=manager
             )
             voltar_menu_button = pygame_gui.elements.UIButton(
